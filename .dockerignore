@@ -1,0 +1,10 @@
+node_modules
+.git
+*.log
+.vscode
+.DS_Store
+.next
+.env
+.env.local
+.env.*.local
+.env.docker

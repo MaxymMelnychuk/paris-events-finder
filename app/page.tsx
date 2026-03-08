@@ -5,6 +5,9 @@ import { fetchEvents } from "@/lib/fetchEvents";
 import { useRouter } from "next/navigation";
 import type { Event } from "@/types/event";
 import type { SessionUser } from "@/types/auth";
+import { Button } from "@/components/ui/Button";
+import { TextInput } from "@/components/ui/TextInput";
+import { EventCard } from "@/components/events/EventCard";
 
 export default function Home() {
   const router = useRouter();
@@ -48,20 +51,20 @@ export default function Home() {
     <div className="flex flex-col items-center p-8">
       <div className="flex gap-4 w-full mb-4 justify-between items-center">
         <div className="flex gap-2 w-full max-w-xl">
-          <input
+          <TextInput
             type="text"
             value={query}
             placeholder="Search for an event"
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 border border-neutral-800 bg-neutral-900 text-white p-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-600"
+            className="flex-1 p-2 px-3 text-sm"
           />
-          <button
+          <Button
             type="submit"
             onClick={handleSearch}
-            className="bg-black text-white cursor-pointer border border-neutral-800 px-4 py-2 text-sm font-medium hover:bg-neutral-900/50 transition-colors"
+            variant="primary"
           >
             Search
-          </button>
+          </Button>
         </div>
 
         <div>
@@ -83,27 +86,25 @@ export default function Home() {
                 </svg>
                 {user.username}
               </span>
-              <button
+              <Button
                 onClick={handleLogout}
-                className="border border-red-950 px-4 py-2 text-sm hover:bg-red-900/75 transition-colors cursor-pointer"
+                variant="danger"
               >
                 Logout
-              </button>
+              </Button>
             </div>
           ) : (
             <div className="flex gap-2">
-              <button
+              <Button
                 onClick={() => router.push("/auth/login")}
-                className="border border-neutral-700  px-4 py-2 text-sm hover:bg-neutral-800/50 transition-colors cursor-pointer"
               >
                 Login
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => router.push("/auth/register")}
-                className="border border-neutral-700   px-4 py-2 text-sm hover:bg-neutral-800/50 transition-colors cursor-pointer"
               >
                 Register
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -117,26 +118,7 @@ export default function Home() {
       ) : (
         <ul className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[20rem] p-4 text-white">
           {results.map((event) => (
-            <li
-              key={event.id}
-              className="bg-neutral-900 backdrop-blur-sm shadow-md rounded-sm p-6 my-4 transition-transform transform hover:-translate-y-1 hover:shadow-lg border border-neutral-800 overflow-y-auto"
-            >
-              <h2 className="text-xl font-semibold mb-2">
-                {event.title || "Unknown title"}
-              </h2>
-              <p className="text-gray-300 mb-1">
-                {event.address_name || "Unknown address"}
-              </p>
-              <p className="text-gray-400 text-sm">
-                {event.date_start || "Unknown date"}
-              </p>
-              <p className="text-gray-400 text-sm">
-                {event.category || "Unknown category"}
-              </p>
-              <p className="text-gray-400 text-sm">
-                {"Price type : " + (event.price_type || "Unknown")}
-              </p>
-            </li>
+            <EventCard key={event.id} event={event} />
           ))}
         </ul>
       )}
